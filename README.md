@@ -127,4 +127,4 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 =======
 # AL-107-Journal
 Cyberpunk 2077-inspired task management application that turns  everyday  responsibilities  into  atmospheric  contracts.
->>>>>>> 86845b2522aa70a9d9882146bfb0ca8e7fce010b
+
