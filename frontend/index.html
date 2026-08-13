@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AL-107 // JOURNAL</title>
+<link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body style="padding-bottom:76px;">
+
+<div class="scanlines"></div>
+<div class="noise"></div>
+
+<!-- BOOT SCREEN -->
+<div id="boot-screen">
+  <div class="boot-content">
+    <div class="boot-logo">AL-107</div>
+    <div class="boot-sub">ADAPTIVE RECONNAISSANCE & INTELLIGENCE ASSISTANT · UNIT 107</div>
+    <div class="boot-bar"><div class="boot-bar-fill" id="boot-bar-fill"></div></div>
+    <div class="boot-status" id="boot-status">INITIALIZING NEURAL LINK...</div>
+  </div>
+</div>
+
+<!-- QUEST ACCEPTED OVERLAY -->
+<div id="quest-accepted-overlay" class="quest-overlay hidden">
+  <div class="qa-inner">
+    <div class="qa-line">CONTRACT RECEIVED</div>
+    <div class="qa-title" id="qa-title"></div>
+    <div class="qa-sub" id="qa-sub"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+
+  <!-- TOP NAV -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="topbar-logo">AL<span class="accent">-107</span></span>
+      <span class="topbar-slash">//</span>
+      <span class="topbar-system">JOURNAL</span>
+    </div>
+    <div class="topbar-player">
+      <div class="player-name" id="p-name">V</div>
+      <div class="player-stats">
+        <span class="p-level" id="p-level">LVL 1</span>
+        <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xp-bar-fill"></div></div>
+        <span class="p-xp" id="p-xp">0 XP</span>
+      </div>
+    </div>
+    <nav class="topbar-nav">
+      <button class="nav-btn active" data-view="dashboard">DASHBOARD</button>
+      <button class="nav-btn" data-view="npc">FIXERS</button>
+      <button class="nav-btn" data-view="completed">ARCHIVE</button>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- ── DASHBOARD ── -->
+    <div id="view-dashboard" class="view active">
+      <div class="view-header">
+        <h1 class="view-title">ACTIVE CONTRACTS</h1>
+        <button class="btn-primary" id="open-add-quest">+ NEW CONTRACT</button>
+      </div>
+      <div class="quest-filters">
+        <button class="filter-btn active" data-filter="all">ALL</button>
+        <button class="filter-btn" data-filter="main">MAIN</button>
+        <button class="filter-btn" data-filter="side">SIDE</button>
+        <button class="filter-btn" data-filter="personal">PERSONAL</button>
+      </div>
+      <div class="quest-grid" id="active-quest-grid">
+        <div class="empty-state" id="empty-active">
+          <div class="empty-icon">◈</div>
+          <div class="empty-text">No active contracts.<br/>You're either very efficient or very dead.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FIXERS ── -->
+    <div id="view-npc" class="view">
+      <div class="view-header"><h1 class="view-title">FIXER NETWORK</h1></div>
+      <div class="npc-grid" id="npc-grid">
+        <div class="empty-state"><div class="empty-icon">◈</div><div class="empty-text">No fixers on record yet.</div></div>
+      </div>
+      <div id="npc-detail-panel" class="npc-detail hidden">
+        <div class="npc-detail-header">
+          <button class="back-btn" id="npc-back">← BACK</button>
+          <h2 id="npc-detail-name"></h2>
+        </div>
+        <div class="quest-grid" id="npc-quest-list"></div>
+      </div>
+    </div>
+
+    <!-- ── ARCHIVE ── -->
+    <div id="view-completed" class="view">
+      <div class="view-header"><h1 class="view-title">MISSION ARCHIVE</h1></div>
+      <div class="quest-grid" id="completed-grid">
+        <div class="empty-state"><div class="empty-icon">◈</div><div class="empty-text">No archived contracts.</div></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── AL-107 CHAT PANEL ── -->
+  <div id="al107-panel" class="al107-panel hidden">
+    <div class="al107-panel-header">
+      <div class="al107-panel-id">
+        <span class="al107-name">AL-107</span>
+        <span class="al107-status-dot"></span>
+        <span class="al107-status-txt">ONLINE</span>
+      </div>
+      <div class="al107-panel-sub">ADAPTIVE RECONNAISSANCE & INTELLIGENCE ASSISTANT</div>
+      <button class="al107-panel-close" id="al107-close">✕</button>
+    </div>
+
+    <div class="al107-messages" id="al107-messages">
+      <!-- messages injected here -->
+    </div>
+
+    <div class="al107-input-area">
+      <textarea
+        id="al107-input"
+        class="al107-input"
+        placeholder="Transmit message to AL-107..."
+        rows="2"
+      ></textarea>
+      <button class="al107-send-btn" id="al107-send">
+        <span id="al107-send-txt">SEND</span>
+        <span id="al107-send-spin" class="spinner hidden"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- AL-107 TOGGLE BUTTON -->
+  <button class="al107-toggle" id="al107-toggle">
+    <span class="al107-toggle-icon">◈</span>
+    <span>AL-107</span>
+    <span class="al107-unread" id="al107-unread" style="display:none">!</span>
+  </button>
+
+  <!-- ADD QUEST MODAL -->
+  <div id="add-quest-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">// NEW CONTRACT</span>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">MISSION BRIEF <span class="required">*</span></label>
+          <textarea id="f-raw-task" class="form-input" placeholder="Describe your task in plain language. AL-107 will convert it." rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">QUEST GIVER / FIXER <span class="form-optional">(leave blank for personal)</span></label>
+          <input id="f-npc" class="form-input" type="text" placeholder="Who gave you this contract?"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">CONTRACT TYPE</label>
+          <div class="type-toggle">
+            <button class="type-btn" data-type="main">MAIN JOB</button>
+            <button class="type-btn active" data-type="side">SIDE GIG</button>
+            <button class="type-btn personal" data-type="personal">PERSONAL</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">XP REWARD</label>
+          <input id="f-xp" class="form-input" type="number" value="100" min="10" max="1000" step="10"/>
+        </div>
+        <div class="form-ai-note">
+          <span class="ai-dot">◈</span> AL-107 will generate the quest name, briefing, and send you a full mission message.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="modal-cancel">ABORT</button>
+        <button class="btn-primary" id="submit-quest">
+          <span id="submit-text">TRANSMIT CONTRACT</span>
+          <span id="submit-spinner" class="spinner hidden"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer" style="position:fixed;left:12px;bottom:12px;max-width:calc(100% - 220px);width:auto;padding:8px 12px;z-index:1000;text-align:left;background:transparent;">
+    <h4 style="margin:0;">Developed by <span style="color: #00f0ff; font-size: larger;">netrunnerMerc</span></h4>
+    <h5 style="opacity: 0.5;margin:4px 0 0 0;">AI was used to develop this project</h5>
+  </footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

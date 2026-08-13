@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AL-107 // ACCESS</title>
+<link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cyan:#00f0ff;--yellow:#ffe600;--red:#ff003c;
+  --bg:#08080f;--bg2:#0d0d1a;--border:#1a1a2e;
+  --text:#c8d0e0;--dim:#5a6070;
+  --font:'Share Tech Mono',monospace;
+  --logo:'Orbitron',sans-serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden}
+
+.scanlines{position:fixed;inset:0;pointer-events:none;z-index:999;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.09) 2px,rgba(0,0,0,0.09) 4px)}
+
+.wrap{
+  height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2.5rem;
+  padding:2rem;
+}
+
+.logo-block{text-align:center}
+.logo{
+  font-family:var(--logo);font-size:clamp(2.5rem,10vw,5rem);
+  color:var(--cyan);letter-spacing:0.2em;
+  text-shadow:0 0 20px var(--cyan),0 0 60px rgba(0,240,255,0.3);
+  animation:flicker 3s ease-in-out infinite;
+}
+.logo-sub{
+  font-size:0.65rem;letter-spacing:0.2em;color:var(--dim);
+  margin-top:0.5rem;
+}
+
+.pin-block{display:flex;flex-direction:column;align-items:center;gap:1.5rem;width:100%;max-width:320px}
+
+.pin-label{font-size:0.7rem;letter-spacing:0.2em;color:var(--dim)}
+
+/* PIN dots display */
+.pin-display{display:flex;gap:1rem;align-items:center;justify-content:center;height:28px}
+.pin-dot{
+  width:14px;height:14px;border-radius:50%;
+  border:1px solid var(--dim);
+  transition:all 0.15s;
+  position:relative;
+}
+.pin-dot.filled{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.pin-dot.error{background:var(--red);border-color:var(--red);box-shadow:0 0 10px var(--red);animation:shake 0.4s ease}
+
+/* Numpad */
+.numpad{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;
+  width:100%;
+}
+.num-btn{
+  background:var(--bg2);border:1px solid var(--border);
+  color:var(--text);font-family:var(--font);font-size:1.2rem;
+  padding:0.9rem 0;cursor:pointer;border-radius:2px;
+  transition:all 0.12s;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.num-btn:hover,.num-btn:active{
+  border-color:var(--cyan);color:var(--cyan);
+  background:rgba(0,240,255,0.07);
+  box-shadow:0 0 12px rgba(0,240,255,0.15);
+}
+.num-btn.del{color:var(--dim);font-size:0.9rem}
+.num-btn.del:hover,.num-btn.del:active{border-color:var(--red);color:var(--red)}
+
+/* Status line */
+.status-line{
+  font-size:0.65rem;letter-spacing:0.15em;
+  min-height:1.2em;color:var(--dim);text-align:center;
+  transition:color 0.2s;
+}
+.status-line.ok{color:#00ff88}
+.status-line.err{color:var(--red);animation:blink 0.3s ease 3}
+
+/* Spinner */
+.spinner{
+  display:inline-block;width:12px;height:12px;
+  border:2px solid var(--dim);border-top-color:var(--cyan);
+  border-radius:50%;animation:spin 0.6s linear infinite;
+  vertical-align:middle;margin-right:0.4rem;
+}
+
+@keyframes flicker{0%,100%{opacity:1}92%{opacity:1}93%{opacity:0.35}94%{opacity:1}97%{opacity:0.6}98%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+<div class="scanlines"></div>
+<div class="wrap">
+  <div class="logo-block">
+    <div class="logo">AL-107</div>
+    <div class="logo-sub">NEURAL LINK AUTHENTICATION REQUIRED</div>
+  </div>
+
+  <div class="pin-block">
+    <div class="pin-label">ENTER ACCESS CODE</div>
+
+    <div class="pin-display" id="pin-display">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+    </div>
+
+    <div class="numpad" id="numpad">
+      <button class="num-btn" data-n="1">1</button>
+      <button class="num-btn" data-n="2">2</button>
+      <button class="num-btn" data-n="3">3</button>
+      <button class="num-btn" data-n="4">4</button>
+      <button class="num-btn" data-n="5">5</button>
+      <button class="num-btn" data-n="6">6</button>
+      <button class="num-btn" data-n="7">7</button>
+      <button class="num-btn" data-n="8">8</button>
+      <button class="num-btn" data-n="9">9</button>
+      <button class="num-btn del" data-n="clear">CLR</button>
+      <button class="num-btn" data-n="0">0</button>
+      <button class="num-btn del" data-n="del">⌫</button>
+    </div>
+
+    <div class="status-line" id="status-line">AWAITING INPUT</div>
+  </div>
+</div>
+
+<script>
+let pin = '';
+const MAX = 4;
+let locked = false;
+
+// Audio
+let ctx;
+function beep(freq, dur=0.06, vol=0.06) {
+  try {
+    if (!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='square'; o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    o.start(); o.stop(ctx.currentTime+dur);
+  } catch(e){}
+}
+function beepOk()  { [880,1100,1320].forEach((f,i)=>setTimeout(()=>beep(f,0.12,0.05),i*70)); }
+function beepErr() { beep(180,0.35,0.08); }
+function beepKey() { beep(700,0.04,0.05); }
+
+function updateDots() {
+  for (let i=0;i<MAX;i++) {
+    const d = document.getElementById('d'+i);
+    d.classList.remove('error');
+    d.classList.toggle('filled', i < pin.length);
+  }
+}
+
+function setStatus(msg, cls='') {
+  const el = document.getElementById('status-line');
+  el.className = 'status-line ' + cls;
+  el.innerHTML = msg;
+}
+
+async function submitPin() {
+  if (locked) return;
+  locked = true;
+  setStatus('<span class="spinner"></span>AUTHENTICATING...', '');
+
+  try {
+    const r = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({pin})
+    });
+
+    if (r.ok) {
+      beepOk();
+      sessionStorage.setItem('al107_pin', pin);
+      setStatus('ACCESS GRANTED — JACKING IN...', 'ok');
+      setTimeout(() => { window.location.href = '/'; }, 900);
+    } else {
+      beepErr();
+      setStatus('ACCESS DENIED. INVALID PIN.', 'err');
+      // Shake the dots red
+      for (let i=0;i<MAX;i++) {
+        const d = document.getElementById('d'+i);
+        d.classList.add('error');
+      }
+      setTimeout(() => {
+        pin = '';
+        updateDots();
+        setStatus('AWAITING INPUT');
+        locked = false;
+      }, 1200);
+    }
+  } catch(e) {
+    beepErr();
+    setStatus('CONNECTION FAILED. RETRY.', 'err');
+    pin = '';
+    updateDots();
+    setTimeout(() => { setStatus('AWAITING INPUT'); locked = false; }, 1200);
+  }
+}
+
+document.getElementById('numpad').addEventListener('click', e => {
+  const btn = e.target.closest('.num-btn');
+  if (!btn || locked) return;
+  const n = btn.dataset.n;
+
+  if (n === 'del') {
+    if (pin.length > 0) { beepKey(); pin = pin.slice(0,-1); updateDots(); setStatus('AWAITING INPUT'); }
+    return;
+  }
+  if (n === 'clear') {
+    beepKey(); pin = ''; updateDots(); setStatus('AWAITING INPUT');
+    return;
+  }
+  if (pin.length >= MAX) return;
+  beepKey();
+  pin += n;
+  updateDots();
+
+  if (pin.length === MAX) {
+    setTimeout(submitPin, 120);
+  }
+});
+
+// Physical keyboard support
+document.addEventListener('keydown', e => {
+  if (locked) return;
+  if (e.key >= '0' && e.key <= '9') {
+    if (pin.length < MAX) {
+      beepKey();
+      pin += e.key;
+      updateDots();
+      if (pin.length === MAX) setTimeout(submitPin, 120);
+    }
+  } else if (e.key === 'Backspace') {
+    if (pin.length > 0) { beepKey(); pin = pin.slice(0,-1); updateDots(); }
+  } else if (e.key === 'Escape') {
+    beepKey(); pin = ''; updateDots(); setStatus('AWAITING INPUT');
+  }
+});
+</script>
+</body>
+</html>
