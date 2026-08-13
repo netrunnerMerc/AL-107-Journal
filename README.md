@@ -1,8 +1,13 @@
-<<<<<<< HEAD
 # AL-107 // QUEST SYSTEM
 ### Cyberpunk 2077 Themed Task Manager
 
-Questlines is a Cyberpunk 2077-inspired task management application that turns everyday responsibilities into atmospheric contracts. Built with a FastAPI backend, SQLite persistence, and a vanilla HTML/CSS/JavaScript frontend, it lets users create quests, assign fixers, classify work as main jobs, side gigs, or personal missions, and track active, completed, or failed status. An XP and leveling system rewards completed contracts while deducting progress when missions are reactivated. The AL-107 assistant integrates Hugging Face chat completions to generate quest titles, gritty descriptions, operational briefings, status messages, and contextual chat replies based on the player’s current workload. A PIN-protected API, fixer network view, mission archive, animated contract acceptance flow, audio cues, and mobile-friendly browser access create a focused productivity tool wrapped in an immersive Night City interface. The project demonstrates lightweight full-stack design, gamification, and AI-assisted narrative framing for personal task tracking and motivation without requiring a complex deployment pipeline setup. 
+- AL-107: Journal or Questlines is a Cyberpunk 2077-inspired task management application that turns everyday responsibilities into atmospheric contracts. 
+- Built with a FastAPI backend, SQLite persistence, and a vanilla HTML/CSS/JavaScript frontend, it lets users create quests, assign fixers, classify work as main jobs, side gigs, or personal missions, and track active, completed, or failed status. 
+- An XP and leveling system rewards completed contracts while deducting progress when missions are reactivated. 
+- The AL-107 assistant integrates Hugging Face chat completions to generate quest titles, gritty descriptions, operational briefings, status messages, and contextual chat replies based on the player’s current workload. 
+- A PIN-protected API, fixer network view, mission archive, animated contract acceptance flow, audio cues, and mobile-friendly browser access create a focused productivity tool wrapped in an immersive Night City interface. 
+- The project demonstrates lightweight full-stack design, gamification, and AI-assisted narrative framing for personal task tracking and motivation without requiring a complex deployment pipeline setup.
+
 ---
 
 ## QUICK START
@@ -27,6 +32,7 @@ cyberpunk-quests/
 Open `backend/.env` and replace the placeholder:
 ```
 HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+APP_PIN=1107 [You can set your app pin to anything you want]
 ```
 Get your token at: https://huggingface.co/settings/tokens
 
