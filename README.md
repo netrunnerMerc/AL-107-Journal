@@ -128,9 +128,8 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 - `Ctrl + Enter` in the task textarea → submit quest
 
 ---
-
-- *"Another contract. Another night in Night City."* — AL-107
-=======
+- *"Another contract. Another night in Night City."* - AL-107
+---
 # AL-107-Journal
 Cyberpunk 2077-inspired task management application that turns  everyday  responsibilities  into  atmospheric  contracts.
 
